@@ -12,6 +12,9 @@
 
 using namespace std;
 
+#define LARGURA 500
+#define ALTURA 500
+
 /**********  Classes   **********/
 class Edge{
 	public:
@@ -61,13 +64,13 @@ void setInicialConfig(){
 	//Initialize camera
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, 500, 500, 0.0, 0.0, 1.0);
+	glOrtho(0.0, LARGURA, ALTURA, 0.0, 0.0, 1.0);
 	
 	//Initialize RGB array
-	pixels = new RGBType[500*500];
+	pixels = new RGBType[LARGURA*ALTURA];
 	
 	// Set everything to black initially.
-	for (int i = 0; i < 500*500; i++) {
+	for (int i = 0; i < LARGURA*ALTURA; i++) {
 		pixels[i].r = 1;
 		pixels[i].g = 1;
 		pixels[i].b = 1;
@@ -96,7 +99,7 @@ void draw(GLfloat x1, GLfloat x2) {
 	int count = 0;
 	
 	// Changes color of the pixels to white
-	for (int i = ((500 * (500 - scanline)) + point1); i < ((500 * (500 - scanline)) + point2); i++) {
+	for (int i = ((LARGURA * (ALTURA - scanline)) + point1); i < ((LARGURA * (ALTURA - scanline)) + point2); i++) {
 		pixels[i].r = 0;
 		pixels[i].b = 0;
 		pixels[i].g = 0;
@@ -181,12 +184,10 @@ void preencheFigura() {
 void menu(int id) {
 	printf("Entrou no menu com id = %d\n", id);
 	switch (id) {
-		// If chooses to draw polygon
+		
 		case 1:
-			// If has at least three points
-			if(allEdges.size() > 1){
 				preencheFigura();
-			}
+			
 			break;
 	}
 	glutPostRedisplay();
@@ -245,7 +246,7 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	//Draw pixels, using pixels array
-	glDrawPixels(500, 500, GL_RGB, GL_FLOAT, pixels);
+	glDrawPixels(LARGURA, ALTURA, GL_RGB, GL_FLOAT, pixels);
 	
 	// Defines the size and color of the point
 	glPointSize(5);
@@ -262,7 +263,7 @@ void display(){
 	
 	// Draws the final screen 
 	if(DRAWING) {
-		glDrawPixels(500, 500, GL_RGB, GL_FLOAT, pixels);
+		glDrawPixels(LARGURA, ALTURA, GL_RGB, GL_FLOAT, pixels);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < points.size(); i++) {
@@ -280,8 +281,8 @@ int main(int argc, char** argv){
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
 	// Create a window in the middle of screen 
-	glutInitWindowSize(500, 500);
-	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-500)/2, (glutGet(GLUT_SCREEN_HEIGHT)-500)/2);
+	glutInitWindowSize(LARGURA, ALTURA);
+	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-LARGURA)/2, (glutGet(GLUT_SCREEN_HEIGHT)-ALTURA)/2);
 
 	glutCreateWindow("Scan Line Fill"); // Window Title
 
