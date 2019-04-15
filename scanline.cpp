@@ -3,6 +3,7 @@
 #include <tuple>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 // OpenGL library
 #include <GL/glut.h>
@@ -67,9 +68,9 @@ void setInicialConfig(){
     
     // Set everything to black initially.
     for (int i = 0; i < 500*500; i++) {
-        pixels[i].r = 0;
-        pixels[i].g = 0;
-        pixels[i].b = 0;
+        pixels[i].r = 1;
+        pixels[i].g = 1;
+        pixels[i].b = 1;
     }
     
     DRAWING = false;
@@ -96,9 +97,9 @@ void draw(GLfloat x1, GLfloat x2) {
     
     // Changes color of the pixels to white
     for (int i = ((500 * (500 - scanline)) + point1); i < ((500 * (500 - scanline)) + point2); i++) {
-        pixels[i].r = 1;
-        pixels[i].b = 1;
-        pixels[i].g = 1;
+        pixels[i].r = 0;
+        pixels[i].b = 0;
+        pixels[i].g = 0;
         glutPostRedisplay();
     }
 }
@@ -241,7 +242,7 @@ void display(){
     
     // Defines the size and color of the point
     glPointSize(5);
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(0, 0, 0);
     
     // Draw screen
     if (!DRAWING) {
