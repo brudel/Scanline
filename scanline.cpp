@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// Define size of window
 #define WIDTH 500
 #define HEIGHT 500
 
@@ -48,11 +49,11 @@ class RGBType {
 
 
 /**********  Globals   **********/
-GLint scanline;						 // Value of Y of the scanline
-bool DRAWING;						   // Controls user input
-vector<tuple<GLint, GLint>> points;	 // All vertexes of the polygon
-vector<Edge> allEdges;				  // Every Edge of the polygon
-vector<Edge> activeEdges;			   // Edges in process of scanline
+GLint scanline;						 	// Value of Y of the scanline
+bool DRAWING;						   	// Controls user input
+vector<tuple<GLint, GLint>> points;	 	// All vertexes of the polygon
+vector<Edge> allEdges;				  	// Every Edge of the polygon
+vector<Edge> activeEdges;			   	// Edges in process of scanline
 RGBType *pixels;						// All pixels of the screen
 
 
@@ -69,14 +70,14 @@ void setInicialConfig(){
 	//Initialize RGB array
 	pixels = new RGBType[WIDTH*HEIGHT];
 	
-	// Set everything to black initially.
+	// Set everything to white initially.
 	for (int i = 0; i < WIDTH*HEIGHT; i++) {
 		pixels[i].r = 1;
 		pixels[i].g = 1;
 		pixels[i].b = 1;
 	}
 	
-	DRAWING = false;
+	DRAWING = false;  // User can draw
 }
 
 // Sort by minY, if equal sort by minX
@@ -98,7 +99,7 @@ void draw(GLfloat x1, GLfloat x2) {
 	int point2 = roundf(x2);
 	int count = 0;
 	
-	// Changes color of the pixels to white
+	// Changes color of the pixels to black
 	for (int i = ((WIDTH * (HEIGHT - scanline)) + point1); i < ((WIDTH * (HEIGHT - scanline)) + point2); i++) {
 		pixels[i].r = 0;
 		pixels[i].b = 0;
@@ -149,7 +150,7 @@ void sortAllEdges() {
 }
 
 void scanlineFill() {
-// Add final edge of polygon
+	// Add final edge of polygon
 	Edge newEdge(points.at(0), points.at(points.size()-1));
 	allEdges.push_back(newEdge);
 
@@ -182,12 +183,10 @@ void scanlineFill() {
 
 // Function for menu
 void menu(int id) {
-	printf("Entrou no menu com id = %d\n", id);
 	switch (id) {
 		// If chooses to draw polygon
 		case 1:
-				scanlineFill(); // Do scanline fill
-			
+			scanlineFill(); // Do scanline fill
 			break;
 	}
 	glutPostRedisplay();
@@ -195,8 +194,8 @@ void menu(int id) {
 
 // Function for Keyboard keys
 void keyboard(unsigned char key, int xmouse, int ymouse) {
-
 	switch (key) {
+		// Enter does scanline
 		case 13:
 			scanlineFill();
 			break;
@@ -207,7 +206,6 @@ void keyboard(unsigned char key, int xmouse, int ymouse) {
 			glutDestroyWindow(glutGetWindow());
 			exit(0);
 			break;
-
 	}
 	glutPostRedisplay();
 }
