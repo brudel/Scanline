@@ -12,8 +12,8 @@
 
 using namespace std;
 
-#define LARGURA 500
-#define ALTURA 500
+#define WIDTH 500
+#define HEIGHT 500
 
 /**********  Classes   **********/
 class Edge{
@@ -64,13 +64,13 @@ void setInicialConfig(){
 	//Initialize camera
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0.0, LARGURA, ALTURA, 0.0, 0.0, 1.0);
+	glOrtho(0.0, WIDTH, HEIGHT, 0.0, 0.0, 1.0);
 	
 	//Initialize RGB array
-	pixels = new RGBType[LARGURA*ALTURA];
+	pixels = new RGBType[WIDTH*HEIGHT];
 	
 	// Set everything to black initially.
-	for (int i = 0; i < LARGURA*ALTURA; i++) {
+	for (int i = 0; i < WIDTH*HEIGHT; i++) {
 		pixels[i].r = 1;
 		pixels[i].g = 1;
 		pixels[i].b = 1;
@@ -80,14 +80,14 @@ void setInicialConfig(){
 }
 
 // Sort by minY, if equal sort by minX
-bool ordenaMinY(const Edge& edge1, const Edge& edge2){
+bool sortByMinY(const Edge& edge1, const Edge& edge2){
 	if (edge1.minY != edge2.minY)
 		return (edge1.minY < edge2.minY);
 	return (edge1.minX < edge2.minX);
 }
 
 // Sort by current x values
-bool ordenaPorX(const Edge& edge1, const Edge& edge2){
+bool sortByXPos(const Edge& edge1, const Edge& edge2){
 	return (edge1.xStartPos < edge2.xStartPos);
 }
 
@@ -99,7 +99,7 @@ void draw(GLfloat x1, GLfloat x2) {
 	int count = 0;
 	
 	// Changes color of the pixels to white
-	for (int i = ((LARGURA * (ALTURA - scanline)) + point1); i < ((LARGURA * (ALTURA - scanline)) + point2); i++) {
+	for (int i = ((WIDTH * (HEIGHT - scanline)) + point1); i < ((WIDTH * (HEIGHT - scanline)) + point2); i++) {
 		pixels[i].r = 0;
 		pixels[i].b = 0;
 		pixels[i].g = 0;
@@ -138,7 +138,7 @@ void removeActiveEdges(){
 
 // Sort Edges to begin scanline
 void sortAllEdges() {
-	sort(allEdges.begin(), allEdges.end(), ordenaMinY);  // Sort Edges
+	sort(allEdges.begin(), allEdges.end(), sortByMinY);  // Sort Edges
 	// Iterate over all edges
 	for(vector<Edge>::iterator it = allEdges.begin(); it < allEdges.end(); it++){
 		// Remove horizontal edges
@@ -148,7 +148,7 @@ void sortAllEdges() {
 	}
 }
 
-void preencheFigura() {
+void scanlineFill() {
 // Add final edge of polygon
 	Edge newEdge(points.at(0), points.at(points.size()-1));
 	allEdges.push_back(newEdge);
@@ -174,7 +174,7 @@ void preencheFigura() {
 		updateXValues();
 		addActiveEdges();
 		
-		sort(activeEdges.begin(), activeEdges.end(), ordenaPorX); // Sort active edges by x value
+		sort(activeEdges.begin(), activeEdges.end(), sortByXPos); // Sort active edges by x value
 		
 		glutPostRedisplay();  // Update screen
 	}
@@ -184,9 +184,9 @@ void preencheFigura() {
 void menu(int id) {
 	printf("Entrou no menu com id = %d\n", id);
 	switch (id) {
-		
+		// If chooses to draw polygon
 		case 1:
-				preencheFigura();
+				scanlineFill(); // Do scanline fill
 			
 			break;
 	}
@@ -198,7 +198,7 @@ void keyboard(unsigned char key, int xmouse, int ymouse) {
 
 	switch (key) {
 		case 13:
-			preencheFigura();
+			scanlineFill();
 			break;
 
 		// If Esc is pressed, exit program
@@ -246,7 +246,7 @@ void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	//Draw pixels, using pixels array
-	glDrawPixels(LARGURA, ALTURA, GL_RGB, GL_FLOAT, pixels);
+	glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_FLOAT, pixels);
 	
 	// Defines the size and color of the point
 	glPointSize(5);
@@ -263,7 +263,7 @@ void display(){
 	
 	// Draws the final screen 
 	if(DRAWING) {
-		glDrawPixels(LARGURA, ALTURA, GL_RGB, GL_FLOAT, pixels);
+		glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_FLOAT, pixels);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glBegin(GL_POLYGON);
 		for (int i = 0; i < points.size(); i++) {
@@ -281,8 +281,8 @@ int main(int argc, char** argv){
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 
 	// Create a window in the middle of screen 
-	glutInitWindowSize(LARGURA, ALTURA);
-	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-LARGURA)/2, (glutGet(GLUT_SCREEN_HEIGHT)-ALTURA)/2);
+	glutInitWindowSize(WIDTH, HEIGHT);
+	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-WIDTH)/2, (glutGet(GLUT_SCREEN_HEIGHT)-HEIGHT)/2);
 
 	glutCreateWindow("Scan Line Fill"); // Window Title
 
@@ -293,9 +293,9 @@ int main(int argc, char** argv){
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse_down);
 
-	// Menu usando botão direito do mause
+	// Create right click menu
 	glutCreateMenu(menu);
-	glutAddMenuEntry("Criar poligono", 1);
+	glutAddMenuEntry("Draw Polygon", 1);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	
 	glutMainLoop();  // Main loop is here
