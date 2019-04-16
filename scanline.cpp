@@ -225,6 +225,11 @@ void keyboard(unsigned char key, int xmouse, int ymouse) {
 			glutDestroyWindow(glutGetWindow());
 			exit(0);
 			break;
+
+		 // If n is pressed, display start over
+		case 'n':
+			restart();
+			break;
 	}
 	glutPostRedisplay();
 }
