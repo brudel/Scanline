@@ -12,6 +12,6 @@
   * Right click and select "Restart" from the menu
 
 ## Development:
-Ygor Pontelo    - 10295631: Scanline Fill algorithm
+Ygor Pontelo - 10295631: Scanline Fill algorithm
 
-Bruno Delmonte  - 10262818: User interface
+Bruno Del Monde - 10262818: User interface
