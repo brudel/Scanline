@@ -181,6 +181,22 @@ void scanlineFill() {
 	}
 }
 
+void restart(){
+	// Clear data from vectors
+	points.clear();
+	allEdges.clear();
+	activeEdges.clear();
+
+	// Set everything to white
+	for (int i = 0; i < WIDTH*HEIGHT; i++) {
+		pixels[i].r = 1;
+		pixels[i].g = 1;
+		pixels[i].b = 1;
+	}
+	
+	DRAWING = false;  // User can draw
+}
+
 // Function for menu
 void menu(int id) {
 	switch (id) {
@@ -188,6 +204,9 @@ void menu(int id) {
 		case 1:
 			scanlineFill(); // Do scanline fill
 			break;
+		case 2:
+			restart(); // Start over
+		break;
 	}
 	glutPostRedisplay();
 }
@@ -294,6 +313,7 @@ int main(int argc, char** argv){
 	// Create right click menu
 	glutCreateMenu(menu);
 	glutAddMenuEntry("Draw Polygon", 1);
+	glutAddMenuEntry("Restart", 2);
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 	
 	glutMainLoop();  // Main loop is here
