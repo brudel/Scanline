@@ -6,7 +6,7 @@
   * Left click with mouse on the screen
 
 * Draw and fill polygon:
-  * Right click and select "Fill Polygon" from the menu
+  * Right click and select "Draw Polygon" from the menu
 
 * Clean and restart:
   * Right click and select "Restart" from the menu
